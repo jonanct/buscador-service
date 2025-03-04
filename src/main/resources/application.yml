@@ -1,11 +1,31 @@
 server:
-  port: ${PORT:8761}
+  port: 8081 # Puerto del microservicio
+
+spring:
+  application:
+    name: buscador-service
+
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URL:https://backend-production-092b.up.railway.app/:9200}
+    username: ${ELASTICSEARCH_USERNAME:elastic}
+    password: ${ELASTICSEARCH_PASSWORD:asupersecretpassword}
+    connection-timeout: 1s
+    socket-timeout: 30s
 
 eureka:
+  client:
+    serviceUrl:
+      defaultZone: https://backend-production-092b.up.railway.app/eureka
   instance:
-    hostname: ${RAILWAY_STATIC_URL:localhost}
     health-check-url-path: /actuator/health
     status-page-url-path: /actuator/info
-  client:
-    register-with-eureka: false
-    fetch-registry: false
+    hostname: buscador-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info # Only expose health and info endpoints
+  endpoint:
+    health:
+      show-details: always
